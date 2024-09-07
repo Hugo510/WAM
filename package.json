@@ -1,0 +1,1 @@
+{"name":"wam","version":"0.0.1","private":true,"scripts":{"start":"node node_modules/react-native/local-cli/cli.js start"},"dependencies":{"@reduxjs/toolkit":"^2.2.7","expo-secure-store":"^13.0.2","react-native":"0.75.2","react-native-fast-image":"^8.6.3","react-redux":"^9.1.2","redux":"^5.0.1"}}
