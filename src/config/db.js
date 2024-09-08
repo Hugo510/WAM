@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
+const debug = require('debug')('app:db');
 
+// Función para conectar a la base de datos
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
         });
-        console.log('Conectado a MongoDB Atlas');
+        debug('Conectado a MongoDB Atlas');
     } catch (err) {
-        console.error('Error al conectar con la base de datos:', err);
-        process.exit(1);
+        debug('Error al conectar con la base de datos:', err);
+        process.exit(1); // Cerrar el proceso si no se puede conectar a la base de datos
     }
 };
 
