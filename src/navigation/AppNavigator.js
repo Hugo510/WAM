@@ -1,39 +1,22 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';  // Configura la navegación de toda la app
-import { createStackNavigator } from '@react-navigation/stack'; // Crea un stack de pantallas
-import LoginScreen from '../screens/LoginScreen';  // Pantalla de Login
-import HomeScreen from '../screens/HomeScreen';    // Pantalla Home para usuarios
-import AdminScreen from '../screens/AdminScreen';  // Pantalla Admin para administradores
-import { useSelector } from 'react-redux';         // Permite obtener el estado de Redux
-import ProtectedRoute from './ProtectedRoute';     // Componente que protege rutas basadas en roles
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import AuthStack from './AuthStack';  // Para login/signup
+import MainTabs from './MainTabs';    // Navegación de tabs principales
+import { useSelector } from 'react-redux';
 
-const Stack = createStackNavigator();  // Creación del stack de navegación
+const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-    // Obtiene del estado de Redux si el usuario está autenticado y cuál es su rol
-    const { isAuthenticated, userRole } = useSelector((state) => state.auth);
+    const { isAuthenticated } = useSelector((state) => state.user);
 
     return (
-        <NavigationContainer>  // Contenedor de la navegación
-            <Stack.Navigator>
-                {/* Si el usuario no está autenticado, muestra la pantalla de login */}
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {!isAuthenticated ? (
-                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Auth" component={AuthStack} />
                 ) : (
-                    <>
-                        {/* Si el usuario está autenticado, muestra la pantalla Home para todos los usuarios */}
-                        <Stack.Screen name="Home" component={HomeScreen} />
-
-                        {/* Para los administradores, protegemos la pantalla Admin con 'ProtectedRoute' */}
-                        <Stack.Screen
-                            name="Admin"
-                            children={() => (
-                                <ProtectedRoute requiredRole="admin">
-                                    <AdminScreen />
-                                </ProtectedRoute>
-                            )}
-                        />
-                    </>
+                    <Stack.Screen name="Main" component={MainTabs} />
                 )}
             </Stack.Navigator>
         </NavigationContainer>
