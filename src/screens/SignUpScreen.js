@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../redux/slices/userSlice';
 import Icon from "react-native-vector-icons/Feather"; // Para los iconos
@@ -13,7 +13,7 @@ const FloatingIcon = ({ Icon, color, x, y }) => {
     );
 };
 
-export default function SignUpScreen({ navigation}) {
+export default function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,48 +30,50 @@ export default function SignUpScreen({ navigation}) {
     };
 
     return (
-        <View style={styles.container}>
-            {/* Floating icons */}
-            <FloatingIcon Icon={Icon} color="yellow" x={wp('10%')} y={hp('10%')} />
-            <FloatingIcon Icon={Icon} color="pink" x={wp('85%')} y={hp('15%')} />
-            <FloatingIcon Icon={Icon} color="blue" x={wp('75%')} y={hp('75%')} />
+        <SafeAreaView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                {/* Floating icons */}
+                <FloatingIcon Icon={Icon} color="yellow" x={wp('10%')} y={hp('10%')} />
+                <FloatingIcon Icon={Icon} color="pink" x={wp('85%')} y={hp('15%')} />
+                <FloatingIcon Icon={Icon} color="blue" x={wp('75%')} y={hp('75%')} />
 
-            {/* Form */}
-            <View style={styles.formContainer}>
-                <Text style={styles.title}>Join the Fun!</Text>
-                <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        inputMode="email-address"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={true}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        secureTextEntry={true}
-                    />
-                    {error && <Text style={styles.errorText}>{error}</Text>}
-                    <Pressable style={styles.button} onPress={handleSignUp} disabled={isLoading}>
-                        <Text style={styles.buttonText}>Sign Up</Text>
-                        <Icon name="chevron-right" size={20} color="white" />
+                {/* Form */}
+                <View style={styles.formContainer}>
+                    <Text style={styles.title}>Join the Fun!</Text>
+                    <View style={styles.form}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            inputMode="email-address"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={true}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            secureTextEntry={true}
+                        />
+                        {error && <Text style={styles.errorText}>{error}</Text>}
+                        <Pressable style={styles.button} onPress={handleSignUp} disabled={isLoading}>
+                            <Text style={styles.buttonText}>Sign Up</Text>
+                            <Icon name="chevron-right" size={20} color="white" />
+                        </Pressable>
+                    </View>
+                    <Pressable onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.signUpText}>Do You Have an Account? Log In</Text>
                     </Pressable>
                 </View>
-                <Pressable onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.signUpText}>Do You Have an Account? Log In</Text>
-                </Pressable>
-            </View>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -79,9 +81,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'linear-gradient(0deg, rgba(255,99,71,1) 0%, rgba(255,105,180,1) 50%, rgba(128,0,128,1) 100%)',
+    },
+    scrollViewContent: {
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative',
+        padding: wp('4%'),
     },
     floatingIcon: {
         position: 'absolute',
@@ -129,13 +133,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: wp('2%'),
     },
-    footerText: {
-        color: 'white',
-        textAlign: 'center',
-    },
-    linkText: {
+    signUpText: {
         color: 'white',
         fontWeight: 'bold',
+        textAlign: 'center',
         textDecorationLine: 'underline',
     },
 });

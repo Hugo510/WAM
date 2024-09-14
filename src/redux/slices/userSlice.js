@@ -15,6 +15,7 @@ export const userSlice = createSlice({
         lastLogin: null,
         isLoading: false,
         error: null,
+        isFirstTimeUser: true,  // Nueva propiedad para gestionar el flujo de onboarding
     },
     reducers: {
         loginStart: (state) => {
@@ -32,6 +33,7 @@ export const userSlice = createSlice({
             state.streak = action.payload.streak;
             state.profilePicture = action.payload.profilePicture;
             state.lastLogin = action.payload.lastLogin;
+            state.isFirstTimeUser = action.payload.isFirstTimeUser; // Importante que venga del backend
         },
         loginFailure: (state, action) => {
             state.isLoading = false;
@@ -46,6 +48,7 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.email = action.payload.email;
             state.role = action.payload.role;
+            state.isFirstTimeUser = action.payload.isFirstTimeUser; // Gestionar si es un nuevo usuario
         },
         registerFailure: (state, action) => {
             state.isLoading = false;
@@ -61,6 +64,10 @@ export const userSlice = createSlice({
             state.streak = 0;
             state.profilePicture = '';
             state.lastLogin = null;
+            state.isFirstTimeUser = true;  // Se reinicia el estado
+        },
+        completeOnboarding: (state) => {
+            state.isFirstTimeUser = false; // Marca que el usuario completó el onboarding
         },
         updateAchievements: (state, action) => {
             state.achievements = action.payload.achievements;
@@ -74,7 +81,7 @@ export const userSlice = createSlice({
     }
 });
 
-export const { loginStart, loginSuccess, loginFailure, registerStart, registerSuccess, registerFailure, logout, updateAchievements, updateScore, updateStreak } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, registerStart, registerSuccess, registerFailure, logout, completeOnboarding, updateAchievements, updateScore, updateStreak } = userSlice.actions;
 export default userSlice.reducer;
 
 // Async action for login

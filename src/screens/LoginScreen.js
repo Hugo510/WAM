@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { Button } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -31,63 +31,65 @@ export default function LoginScreen({ navigation }) {
     }, [isAuthenticated, navigation]);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.box}>
-                <View style={styles.content}>
-                    <Text style={styles.title}>Welcome Back!</Text>
-                    <View style={styles.form}>
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Email</Text>
-                            <View style={styles.inputContainer}>
-                                <Icon name="mail" style={styles.icon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter your email"
-                                    inputMode="email-address"
-                                    autoCapitalize="none"
-                                    value={email}
-                                    onChangeText={setEmail}
-                                />
+        <SafeAreaView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.box}>
+                    <View style={styles.content}>
+                        <Text style={styles.title}>Welcome Back!</Text>
+                        <View style={styles.form}>
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Email</Text>
+                                <View style={styles.inputContainer}>
+                                    <Icon name="mail" style={styles.icon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter your email"
+                                        inputMode="email-address"
+                                        autoCapitalize="none"
+                                        value={email}
+                                        onChangeText={setEmail}
+                                    />
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Password</Text>
-                            <View style={styles.inputContainer}>
-                                <Icon name="lock" style={styles.icon} />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter your password"
-                                    secureTextEntry={!showPassword}
-                                    value={password}
-                                    onChangeText={setPassword}
-                                />
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
-                                    <Icon name={showPassword ? "eye-off" : "eye"} style={styles.icon} />
-                                </TouchableOpacity>
+                            <View style={styles.inputGroup}>
+                                <Text style={styles.label}>Password</Text>
+                                <View style={styles.inputContainer}>
+                                    <Icon name="lock" style={styles.icon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter your password"
+                                        secureTextEntry={!showPassword}
+                                        value={password}
+                                        onChangeText={setPassword}
+                                    />
+                                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+                                        <Icon name={showPassword ? "eye-off" : "eye"} style={styles.icon} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                            {error && <Text style={styles.errorText}>{error}</Text>}
+                            {isLoading ? (
+                                <ActivityIndicator size="large" color="rgba(255, 69, 58, 1)" />
+                            ) : (
+                                <Button
+                                    title="Log In"
+                                    buttonStyle={styles.loginButton}
+                                    onPress={handleLogin}
+                                />
+                            )}
                         </View>
-                        {error && <Text style={styles.errorText}>{error}</Text>}
-                        {isLoading ? (
-                            <ActivityIndicator size="large" color="rgba(255, 69, 58, 1)" />
-                        ) : (
-                            <Button
-                                title="Log In"
-                                buttonStyle={styles.loginButton}
-                                onPress={handleLogin}
-                            />
-                        )}
+                        <TouchableOpacity style={styles.forgotPassword}>
+                            <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.forgotPassword}>
-                        <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-                    </TouchableOpacity>
+                    <View style={styles.footer}>
+                        <Pressable onPress={() => navigation.navigate('SignUp')}>
+                            <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
+                        </Pressable>
+                    </View>
                 </View>
-                <View style={styles.footer}>
-                    <Pressable onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
-                    </Pressable>
-                </View>
-            </View>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -95,6 +97,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "rgba(255, 99, 71, 1)",
+    },
+    scrollViewContent: {
         justifyContent: "center",
         alignItems: "center",
         padding: wp('4%'),
@@ -172,10 +176,7 @@ const styles = StyleSheet.create({
     footer: {
         backgroundColor: "rgba(255, 235, 238, 1)",
         paddingVertical: hp('2%'),
-    },
-    footerText: {
-        textAlign: "center",
-        color: "#555",
+        alignItems: "center",
     },
     signUpText: {
         color: "rgba(255, 69, 58, 1)",
