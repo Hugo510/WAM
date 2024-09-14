@@ -7,7 +7,11 @@ const Stack = createStackNavigator();
 
 const WelcomeStack = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true,
+        }}>
             <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="Survey" component={SurveyScreen} />
         </Stack.Navigator>

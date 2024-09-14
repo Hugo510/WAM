@@ -13,7 +13,11 @@ const RootNavigator = () => {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator screenOptions={{
+                headerShown: false,
+                animationEnabled: true,
+                gestureEnabled: true,
+            }}>
                 {/* Siempre incluye todas las pantallas */}
                 <Stack.Screen name="WelcomeStack" component={WelcomeStack} />
                 <Stack.Screen name="AuthStack" component={AuthStack} />
