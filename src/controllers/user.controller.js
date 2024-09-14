@@ -7,7 +7,7 @@ const createError = require('http-errors');
 // Obtener todos los usuarios
 exports.getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find().populate('role').populate('achievements');
+        const users = await User.find().populate('role');
         res.json(users);
     } catch (err) {
         debug('Error al obtener todos los usuarios:', err);
@@ -92,7 +92,7 @@ exports.deleteUser = async (req, res, next) => {
 // Registro de nuevo usuario
 exports.registerUser = async (req, res, next) => {
     try {
-        const { username, email, password, role, profilePicture } = req.body;
+        const { username, email, password, role } = req.body;
 
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ email });
@@ -109,8 +109,7 @@ exports.registerUser = async (req, res, next) => {
             username,
             email,
             password: hashedPassword,
-            role,
-            profilePicture
+            role:'66e50cbdd2b02957d233e5e8',
         });
 
         const savedUser = await newUser.save();

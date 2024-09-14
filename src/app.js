@@ -6,6 +6,12 @@ const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
 const { errors } = require('celebrate');
+//
+const bodyParser = require('body-parser');
+const googleCloudRoutes = require('./routes/googleCloud.routes');
+require('dotenv').config();
+//
+const ocrRoutes = require('./routes/ocr.routes');  // Rutas OCR
 
 // Rutas
 const achievementRoutes = require('./routes/achievement.routes');
@@ -46,12 +52,15 @@ const app = express();
     optionsSuccessStatus: 200
 }; */
 
+// Middleware
+app.use(bodyParser.json());
+
 app.use(cors());
 app.use(hpp());
 app.use(compression());
 app.use(morgan('dev'));
 app.use(express.json());
-
+/*
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
     const message = err.message || 'Error del servidor';
@@ -61,7 +70,7 @@ app.use((err, req, res, next) => {
         status: statusCode,
         message: message,
     });
-});
+});*/
 
 // Limitar solicitudes para prevenir ataques de fuerza bruta
 const limiter = rateLimit({
@@ -87,6 +96,12 @@ app.use('/api/users', userRoutes);
 app.use('/api/userRoles', userRoleRoutes);
 app.use('/api/userScores', userScoreRoutes);
 app.use('/api/userStreaks', userStreakRoutes);
+
+// Rutas de la API de Google Cloud
+app.use('/api/google-cloud', googleCloudRoutes);
+
+// Rutas OCR
+app.use('/api/ocr', ocrRoutes);  // API OCR
 
 // Manejo de errores con Celebrate
 app.use(errors());

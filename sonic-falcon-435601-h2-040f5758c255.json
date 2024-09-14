@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "sonic-falcon-435601-h2",
+  "private_key_id": "040f5758c255ee9110d17fd62616d3396115c086",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCGeJq3m0IdN4vr\nPyAn/hIOB4zgMrX4cywvlE6YhUgEdHhud6MwJSUoCMEYUxLohCzpvIZqJ6jM6f3i\nvjuiho8S1WEs/oj0zgcf+P1qg7SG3OUBn8fVXZVcgWR7eI+uKmY86SIk8qD3LIWh\n9XugKT/AsMlAQDGKrrjkN9XAE7xX0KMirC8JNvn8bpznQhwhG28OnRRcG9ikz+2B\nEqU1aOmCjeDlz6kcNmj5UfTilrymxnT4z0/KwCGE0ZKhrfyYUxx6GJIqszO0t4ry\nw6lb8zavZj5jtGRYf8bFRBYpaRWtNnWt/dCAe2L1VjpM+hUJosdzOfKC+VxPCbr/\nH2DvBI/zAgMBAAECggEADXuML7qeb2WBXu3uYHQmBUgWhOgwvJ93n7GkC8DZTrEK\n3jCaqRogVppCGhlCPRP7mNfxNjWRxDH15cUjH5GUSNQiMSu4OatqpXcGmaZo9Fiz\nkW0e0TLX5fWHSKX26gSQSa0qYj/9iarqHyoI4i8gmEZhd1K4ZOpN2XwLr32LFdbN\nPu3flvTBXgkb/4jPi0yEW77BjEOe9CoP009xmscDsQ+zhFCWCyst1GD9KckzZ/kT\nY66mYjc3K4lD7LczLjQj+ayVj/sahLNcG7GvfKf7FRNDvowRjNygxcOl3S2NyYI6\njVlkR15VaTmtnI9HBbuJQcp9wJrXolAGMtwkxSp0wQKBgQC7/gjA0sWNV0QTJiNi\nsyjJiXRJeA0pC1p9P1x//OPlVmSHFlym1Za+jzdOWyexQ+554lA2lDPb3cwsVFzS\nj1hk9MFp87DwmyV76dc4c34GIAngrkxRY2Lm1Ss8Mu1M2xzLE+1Jz9IOQ2+go0XX\nJ/YqwmyeJL2NAnYXAWk7FaQmIQKBgQC3HfjFBSV7B3ryw08luz2AEf3tGJtH3B35\nzn/DCQsYWbB6L0jXWkAZYxk6E2ZFbafQNBCbpzuwkNYf02jHBj1ebb+Y3MrruOr4\ng7EPdUbMtKuJs2NRN335mLwGxcS3mS4yCjrZpK1aKpes8DlriopAJm3lzGz3f7RO\nrNuuCbdLkwKBgQC2LkYfT2MBSTuAbypFoSf6v0lBVaUzTHxh+kBTDClye9mqDCK3\nzy9p9nJ7bd02bYWy+n4Plmn3Pad6ojreFupr08GIQxAK699UiVX3r/zGRNAtu9vb\n17vlxVlD2nqbS5BIwUPojwyapAGOpAuvqVtnLsmCLErBV0xHmSd4ic1s4QKBgFkJ\nb76MpA7QMk37/W4BPwQYu3kfb9FfDAw9Bg5VRVnPsmmWuDpOHcC6WLfOWvoDOYeY\n6UJl7DYMFrFe4CF1vT0+69xt7xTy0v2HOv6jLYu3hXjtCqug6dYFF9fLLb1/8+BM\n7RSKZ+fhseJa4/CQamyKwwDrh0hIhemDT0WuX7uVAoGAFE1a3K75qNpzr17/N1hs\nPQHW9OjE371crjBE/KGo7Zm60vvdrItlcmxgPvOe6GLU88XQLl0WwUOotOONsom+\n5WouqgcDu/02ZkeDMCRUGHN1orFzYDm1r1/CI1KlA/sRNgGWJFuFs6JLJKkUf9z/\nZZqvC7r4NPYngsu0bSaQH28=\n-----END PRIVATE KEY-----\n",
+  "client_email": "ocr-test@sonic-falcon-435601-h2.iam.gserviceaccount.com",
+  "client_id": "107842424353792872584",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ocr-test%40sonic-falcon-435601-h2.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
