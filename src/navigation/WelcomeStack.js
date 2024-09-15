@@ -4,6 +4,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import SurveyScreen from '../screens/SurveyScreen';
 import LoadingScreen from '../screens/LoadingScreen'; // Nueva pantalla de carga
 import AnalysisResult from '../screens/AnalysisResult'; // Pantalla de resultados
+import FinancialPlanScreen from '../screens/FinancialPlanScreen'; // Importar FinancialPlanScreen
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,8 @@ const WelcomeStack = () => {
             <Stack.Screen name="Survey" component={SurveyScreen} />
             <Stack.Screen name="Loading" component={LoadingScreen} /> 
             <Stack.Screen name="AnalysisResult" component={AnalysisResult} />
-        </Stack.Navigator>
+            <Stack.Screen name="FinancialPlan" component={FinancialPlanScreen} />
+    </Stack.Navigator>
     );
 };
 

@@ -20,7 +20,7 @@ const LoadingScreen = () => {
                 // Simula un retraso de 2 segundos antes de mostrar los resultados
                 setTimeout(() => {
                     navigation.navigate('AnalysisResult', { result: response/* .data */ });
-                }, 4000);
+                }, 2000);
             } catch (error) {
                 console.error("Error fetching analysis:", error);
             }
