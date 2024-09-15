@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';
 import AuthStack from './AuthStack';
 import MainTabs from './MainTabs';
 import WelcomeStack from './WelcomeStack';
@@ -17,6 +17,7 @@ const RootNavigator = () => {
                 headerShown: false,
                 animationEnabled: true,
                 gestureEnabled: true,
+                ...TransitionPresets.FadeFromBottomAndroid
             }}>
                 {/* Siempre incluye todas las pantallas */}
                 <Stack.Screen name="WelcomeStack" component={WelcomeStack} />
