@@ -110,29 +110,56 @@ const IDScanScreen = () => {
         // Simulación de la respuesta del backend con retraso
         setTimeout(() => {
             try {
-                const simulatedResponse = [
-                    {
-                        filename: 'front_image.jpg',
-                        detectedText: 'MÉXICO\nINSTITUTO NACIONAL ELECTORAL\nCREDENCIAL PARA VOTAR\nNOMBRE\nGOMEZ\nHERNANDEZ\nJUAN\nDOMICILIO\nMANUEL AVILA CAMACHO 250\nCOLONIA VILLAS\nDURANGO, DGO\nCLAVE DE ELECTOR\nCURP\nGHEJ890123HDFLRN09\nFECHA DE NACIMIENTO\n23/01/1989\nAÑO DE REGISTRO\n2020 00\nSECCIÓN\n1234\nVIGENCIA\n2020-2030'
-                    },
-                    {
-                        filename: 'back_image.jpg',
-                        detectedText: 'ELECCIONES FEDERALES\nLOCALES Y EXTRAORDINARIAS\n15\nIN\nC006375\nRODRIGO JUÁREZ MÁRQUEZ\nSECRETARIO EJECUTIVO DEL\nINSTITUTO NACIONAL ELECTORAL\nGOMEZ<HERNANDEZ<<JUAN<<<'
-                    }
-                ];
+                // Crear un FormData para enviar las imágenes
+            const formData = new FormData();
 
-                // Procesar el arreglo de 'detectedText' para extraer los campos
-                const extractedData = parseDetectedText(simulatedResponse);
+            // Ajustar la URI para Android (necesario en algunos casos)
+            const adjustedFrontImageUri = frontImage.startsWith('file://') ? frontImage : `file://${frontImage}`;
+            const adjustedBackImageUri = backImage.startsWith('file://') ? backImage : `file://${backImage}`;
 
-                // Verificar si al menos un campo tiene datos
-                const hasData = Object.values(extractedData).some(value => value !== null && value !== '');
+            formData.append('file1', {
+                uri: adjustedFrontImageUri,
+                name: 'front_image.jpg',
+                type: 'image/jpeg',
+            });
+            formData.append('file2', {
+                uri: adjustedBackImageUri,
+                name: 'back_image.jpg',
+                type: 'image/jpeg',
+            });
 
-                if (!hasData) {
-                    throw new Error('No se pudo extraer información válida de las imágenes proporcionadas.');
-                }
+            // URL del backend (actualiza esto con tu endpoint real)
+            const backendUrl = 'http://192.168.237.150:3000/api/vision/upload';
 
-                // Actualizar el estado con los datos extraídos
-                setExtractedData(extractedData);
+            // Realizar la solicitud POST al backend
+            const response = await fetch(backendUrl, {
+                method: 'POST',
+                body: formData,
+            });
+
+            // Verificar si la respuesta es exitosa
+            if (!response.ok) {
+                throw new Error(`Error en la respuesta del servidor: ${response.status} ${response.statusText}`);
+            }
+
+            // Intentar parsear la respuesta JSON
+            let data;
+            try {
+                data = await response.json();
+                console.log(data);
+            } catch (parseError) {
+                throw new Error('Error al parsear la respuesta del servidor.');
+            }// Procesar el arreglo de 'detectedText' para extraer los campos
+            const extractedData = parseDetectedText(data);
+
+            // Verificar si al menos un campo tiene datos
+            const hasData = Object.values(extractedData).some(value => value !== null && value !== '');
+
+            if (!hasData) {
+                throw new Error('No se pudo extraer información válida de las imágenes proporcionadas.');
+            }
+            // Actualizar el estado con los datos extraídos
+            setExtractedData(extractedData);
             } catch (error) {
                 console.error('Error al procesar las imágenes:', error);
                 setError(error.message);
