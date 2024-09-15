@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, TouchableOpacity, Text, Animated } from 'react-native';
+import { SafeAreaView, ScrollView, View, TouchableOpacity, Text, Animated, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRoute } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './styles/surveyStyles';
 
 const questions = [
-    { id: '1', question: '¿Cuál es tu objetivo principal al usar la app?', options: ['Obtener una base sólida en finanzas', 'Desarrollar habilidades para gestionar mejor mi dinero', 'Aprender a invertir de manera efectiva'] },
-    { id: '2', question: '¿Cuál es tu nivel de experiencia en temas financieros?', options: ['No tengo experiencia, soy completamente nuevo', 'Ya tengo algo de experiencia y busco mejorar mis habilidades', 'Soy avanzado y quiero perfeccionar técnicas específicas'] },
-    { id: '3', question: '¿Por qué estás interesado en aprender sobre finanzas?', options: ['Para mejorar la gestión de mis finanzas personales', 'Para iniciar un negocio propio', 'Para invertir y hacer crecer mi dinero', 'Por curiosidad y desarrollo personal'] },
-    { id: '4', question: '¿Qué tipo de cursos te interesan más?', options: ['Finanzas personales y ahorro', 'Inversiones y mercados financieros', 'Emprendimiento y gestión empresarial'] },
-    { id: '5', question: '¿Cuánto tiempo estás dispuesto a dedicar al aprendizaje financiero cada semana?', options: ['Menos de 2 horas', 'Entre 2 y 5 horas', 'Entre 5 y 10 horas', 'Más de 10 horas'] },
+    { id: '1', question: '¿Cuál es tu sexo?', key: 'gender', options: ['Masculino', 'Femenino', 'Prefiero no decirlo'] },
+    { id: '2', question: '¿Cuál es tu fecha de nacimiento?', key: 'birthDate', options: [''] }, // Pregunta abierta con date picker
+    { id: '3', question: '¿Para qué planeas usar la tarjeta?', key: 'cardUsage', options: ['Compras diarias o gastos personales', 'Ahorro e inversión', 'Viajes o compras internacionales'] },
+    { id: '4', question: '¿Cuál es tu ingreso mensual aproximado?', key: 'income', options: ['Menos de $10,000 MXN', 'Entre $10,000 y $30,000 MXN', 'Más de $30,000 MXN'] },
+    { id: '5', question: '¿Te interesan más las recompensas o los descuentos?', key: 'rewardsPreference', options: ['Recompensas o puntos por compras', 'Descuentos en comercios', 'Promociones especiales o meses sin intereses'] },
+    { id: '6', question: '¿Te preocupa pagar comisiones o anualidades?', key: 'commissionsConcern', options: ['Sí, prefiero evitar comisiones', 'No me importa si los beneficios valen la pena', 'Depende del costo de la anualidad'] },
+    { id: '7', question: '¿Con qué frecuencia usarás la tarjeta?', key: 'cardUsageFrequency', options: ['A diario', 'Semanalmente', 'Solo en ocasiones específicas'] },
+    { id: '8', question: '¿Te interesa tener seguros incluidos como protección contra fraudes o robos?', key: 'insuranceInterest', options: ['Sí, protección contra fraudes es importante', 'Sí, me interesan otros seguros como vida o salud', 'No, no me interesa'] },
+    { id: '9', question: '¿Prefieres una cuenta digital o física?', key: 'accountPreference', options: ['Prefiero una cuenta 100% digital', 'Prefiero acudir a una sucursal física', 'No tengo preferencia'] },
 ];
 
 const SurveyScreen = ({ navigation }) => {
@@ -22,6 +27,8 @@ const SurveyScreen = ({ navigation }) => {
     const [backgroundColor] = useState(new Animated.Value(0)); // Para el degradado de fondo
     const [fadeAnim] = useState(new Animated.Value(0)); // Para animar el saludo
     const [scaleAnim] = useState(new Animated.Value(1)); // Para la animación de escala en el botón de "Finalizar"
+    const [date, setDate] = useState(new Date()); // Estado para la fecha
+    const [showPicker, setShowPicker] = useState(false); // Controla cuándo se muestra el DateTimePicker
 
     // useEffect para manejar la animación del saludo, siempre se debe ejecutar
     useEffect(() => {
@@ -49,16 +56,28 @@ const SurveyScreen = ({ navigation }) => {
         outputRange: ['#d32f2f', '#ffffff'], // Rojo cereza a blanco
     });
 
-    const handleAnswer = (questionId, option) => {
+    const handleAnswer = (questionKey, option) => {
         setAnswers(prevAnswers => ({
             ...prevAnswers,
-            [questionId]: option,
+            [questionKey]: option,
+        }));
+    };
+
+    // Manejar la selección de la fecha
+    // Función corregida para manejar el cambio de fecha
+    const handleDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowPicker(Platform.OS === 'ios'); // Ocultar el picker después de seleccionar una fecha en Android
+        setDate(currentDate);
+        setAnswers(prevAnswers => ({
+            ...prevAnswers,
+            'birthDate': currentDate.toLocaleDateString(), // Clave corregida
         }));
     };
 
     // Validación: verificar que ambas preguntas en el paso actual estén respondidas
     const areBothQuestionsAnswered = (questionsInStep) => {
-        return questionsInStep.every(question => answers[question.id]);
+        return questionsInStep.every(question => answers[question.key]);
     };
 
     // Mostrar el botón de siguiente solo si ambas preguntas tienen respuesta
@@ -76,8 +95,8 @@ const SurveyScreen = ({ navigation }) => {
         if ((currentStep + 1) * 2 < questions.length) {
             setCurrentStep(currentStep + 1);
         } else {
-            // Mostrar el botón de "Finalizar" en lugar de icono
-            navigation.navigate('AuthStack', { screen: 'Login' });
+            // Mostrar el botón de "Finalizar" y enviar las respuestas
+            navigation.navigate('Loading', { answers }); // Redirigir a la pantalla de loading con las respuestas
         }
     };
 
@@ -107,15 +126,35 @@ const SurveyScreen = ({ navigation }) => {
     const renderQuestion = (item) => (
         <View key={item.id} style={styles.questionContainer}>
             <Text style={styles.question}>{item.question}</Text>
-            {item.options.map(option => (
-                <TouchableOpacity
-                    key={option}
-                    style={[styles.option, answers[item.id] === option ? styles.selectedOption : null]}
-                    onPress={() => handleAnswer(item.id, option)}
-                >
-                    <Text style={styles.optionText}>{option}</Text>
-                </TouchableOpacity>
-            ))}
+            {/* Condición especial para la pregunta abierta con DatePicker */}
+            {item.id === '2' ? (
+                <>
+                    <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.datePickerButton}>
+                        <Text style={styles.optionText}>
+                            {answers[item.key] ? `Fecha seleccionada: ${answers[item.key]}` : 'Selecciona tu fecha de nacimiento'}
+                        </Text>
+                    </TouchableOpacity>
+                    {showPicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={handleDateChange}
+                            maximumDate={new Date()} // Evitar fechas futuras
+                        />
+                    )}
+                </>
+            ) : (
+                item.options.map(option => (
+                    <TouchableOpacity
+                        key={option}
+                        style={[styles.option, answers[item.key] === option ? styles.selectedOption : null]}
+                        onPress={() => handleAnswer(item.key, option)}
+                    >
+                        <Text style={styles.optionText}>{option}</Text>
+                    </TouchableOpacity>
+                ))
+            )}
         </View>
     );
 

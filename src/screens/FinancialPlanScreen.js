@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
-import ConfettiCannon from 'react-native-confetti-cannon'; // Para el efecto de confeti
+import ConfettiCannon from 'react-native-confetti-cannon';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 
@@ -9,11 +9,11 @@ const { width, height } = Dimensions.get('window');
 const FinancialPlanScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { userName } = route.params; // Nombre del usuario recibido
+    const { userName, chatRecommendation, recommendedModule } = route.params;
 
     const [confettiVisible, setConfettiVisible] = useState(false);
-    const [headerAnim] = useState(new Animated.Value(0)); // Animación de encabezado
-    const [circlesAnim] = useState(new Animated.Value(0)); // Animación para los círculos flotantes
+    const [headerAnim] = useState(new Animated.Value(0));
+    const [circlesAnim] = useState(new Animated.Value(0));
 
     useEffect(() => {
         // Animar el encabezado al cargar la pantalla
@@ -36,8 +36,8 @@ const FinancialPlanScreen = () => {
         // Mostrar confeti y redirigir
         setConfettiVisible(true);
         setTimeout(() => {
-            navigation.navigate('MainTabs'); // Simulación de navegación a otra sección
-        }, 1500); // Redirige después de 1.5 segundos
+            navigation.navigate('IDScanScreen'); // Redirigir a la pantalla correspondiente
+        }, 1500);
     };
 
     const animatedHeaderStyle = {
@@ -80,11 +80,10 @@ const FinancialPlanScreen = () => {
                 </Text>
             </Animated.View>
 
-            {/* Detalles del plan de ahorro */}
+            {/* Detalles del plan financiero */}
             <View style={styles.planDetailsCard}>
-                <Text style={styles.planText}>Ahorro diario: $100 MXN</Text>
-                <Text style={styles.planText}>Tiempo de ahorro: 5 años</Text>
-                <Text style={styles.planText}>Meta: Enganche para un carro</Text>
+                <Text style={styles.planText}>Módulo sugerido: {recommendedModule}</Text>
+                <Text style={styles.planText}>Meta financiera: {chatRecommendation}</Text>
             </View>
 
             {/* Botón para comenzar el plan */}

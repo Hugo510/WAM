@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import ContentLoader, { Rect } from 'react-content-loader/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-
 const { width } = Dimensions.get('window');
 
 const LoadingScreen = () => {
@@ -15,11 +14,11 @@ const LoadingScreen = () => {
         const fetchAnalysis = async () => {
             try {
                 // Simular una llamada al backend
-                const response = /* await axios.post('https://tu-backend.com/analyze', { answers }); */ 'correct';
+                const response = await axios.post('http://192.168.237.150:3000/api/recommendation/get-recommendations', { answers });  /* 'correct'; */
                 
                 // Simula un retraso de 2 segundos antes de mostrar los resultados
                 setTimeout(() => {
-                    navigation.navigate('AnalysisResult', { result: response/* .data */ });
+                    navigation.navigate('AnalysisResult', { result: response.data });
                 }, 2000);
             } catch (error) {
                 console.error("Error fetching analysis:", error);

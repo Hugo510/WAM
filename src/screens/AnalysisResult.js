@@ -1,31 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Animated, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
-import AdvancedCreditCard3D from '../components/Card3D'; // Importar el modelo de tarjeta 3D
-import ConfettiCannon from 'react-native-confetti-cannon'; // Para el efecto de confeti
+import AdvancedCreditCard3D from '../components/Card3D';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const AnalysisResult = () => {
     const navigation = useNavigation();
-    const [userProfile, setUserProfile] = useState(null);
+    const route = useRoute();
+    const { result, userName } = route.params;
+
+    /* console.log('Result in AnalysisResult:', result); */
+
     const [confettiVisible, setConfettiVisible] = useState(false);
-    const [headerAnim] = useState(new Animated.Value(0)); // Animación de encabezado
-    const [circles] = useState(new Animated.Value(0)); // Animación para los círculos flotantes
+    const [headerAnim] = useState(new Animated.Value(0));
+    const [circles] = useState(new Animated.Value(0));
 
     useEffect(() => {
-        // Simulación de datos del backend
-        setTimeout(() => {
-            setUserProfile({
-                title: "Plan Financiero Personalizado",
-                creditLimit: "$50,000 MXN",
-                interestRate: "12% anual",
-                cashback: "5% en compras",
-                description: "Este plan está diseñado especialmente para ti, con un límite de crédito ajustado a tus necesidades y un cashback en todas tus compras.",
-            });
-        }, 2000);
-
         // Animar el encabezado al cargar la pantalla
         Animated.timing(headerAnim, {
             toValue: 1,
@@ -46,7 +39,12 @@ const AnalysisResult = () => {
         // Mostrar confeti y redirigir al usuario
         setConfettiVisible(true);
         setTimeout(() => {
-            navigation.navigate('FinancialPlan', { userName: 'Juan Pérez' });
+            // Pasamos los datos necesarios a FinancialPlan
+            navigation.navigate('FinancialPlan', {
+                userName,
+                chatRecommendation: result.chatRecommendation,
+                recommendedModule: result.recommendedModule,
+            });
         }, 1500); // Redirige después de 1.5 segundos
     };
 
@@ -77,6 +75,14 @@ const AnalysisResult = () => {
         ],
     };
 
+    if (!result) {
+        return (
+            <View style={styles.loadingContainer}>
+                <Text style={styles.loadingText}>Cargando plan personalizado...</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             {/* Fondo animado con círculos flotantes */}
@@ -90,31 +96,20 @@ const AnalysisResult = () => {
             {/* Encabezado animado */}
             <Animated.View style={animatedHeaderStyle}>
                 <Text style={styles.mainTitle}>
-                    ¡
-                    {userProfile
-                        ? `${userProfile.title}, Juan Pérez`
-                        : "Cargando plan personalizado..."}
+                    ¡{result.message}, {userName}!
                 </Text>
             </Animated.View>
 
             {/* Tarjeta de crédito 3D */}
-            <AdvancedCreditCard3D />
+            <AdvancedCreditCard3D cardName={result.recommendedCard} />
 
-            {/* Detalles del plan financiero */}
-            {userProfile && (
-                <View style={styles.card}>
-                    <Text style={styles.creditLimit}>
-                        Límite de crédito: {userProfile.creditLimit}
-                    </Text>
-                    <Text style={styles.interestRate}>
-                        Tasa de interés: {userProfile.interestRate}
-                    </Text>
-                    <Text style={styles.cashback}>
-                        Cashback: {userProfile.cashback}
-                    </Text>
-                    <Text style={styles.description}>{userProfile.description}</Text>
-                </View>
-            )}
+            {/* Detalles de la tarjeta recomendada */}
+            <View style={styles.card}>
+                <Text style={styles.creditLimit}>
+                    Tarjeta recomendada: {result.recommendedCard}
+                </Text>
+                <Text style={styles.description}>{result.cardDescription}</Text>
+            </View>
 
             {/* Botón para obtener la tarjeta */}
             <Button
@@ -168,7 +163,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 5 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
-        elevation: 5, // Para sombras en Android
+        elevation: 5,
         alignItems: 'center',
     },
     creditLimit: {
@@ -207,6 +202,16 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f7f7f7',
+    },
+    loadingText: {
+        fontSize: 18,
+        color: '#555',
     },
 });
 
