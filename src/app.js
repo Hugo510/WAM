@@ -45,12 +45,6 @@ const app = express();
     noSniff: true, // X-Content-Type-Options: nosniff
 })); */
 
-// Otros middlewares
-/* const corsOptions = {
-    origin: 'https://panaderia-admin.vercel.app',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    optionsSuccessStatus: 200
-}; */
 
 // Middleware
 app.use(bodyParser.json());
